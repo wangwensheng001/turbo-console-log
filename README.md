@@ -1,6 +1,9 @@
 # Official Website
 
-https://www.turboconsolelog.io
+fork from https://www.turboconsolelog.io
+add php python support
+only on the log mode and break the other mode work
+so , carefully use it
 
 # Main Functionality
 
