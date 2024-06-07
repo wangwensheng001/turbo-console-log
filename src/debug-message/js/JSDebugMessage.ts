@@ -1,4 +1,4 @@
-import { Position, TextDocument, TextEditorEdit, TextLine } from 'vscode';
+import { Position, TextDocument, TextEditorEdit, TextLine,window } from 'vscode';
 import {
   BlockType,
   ExtensionProperties,
@@ -21,7 +21,50 @@ import {
   LogContextMetadata,
   NamedFunctionMetadata,
 } from '../../entities/extension/logMessage';
-
+function getCurrentLanguage() {  
+  let prefixDiy = "";
+  let joinSymbol = "+";
+  const editor = window.activeTextEditor;  
+  if (editor) {  
+      const languageId = editor.document.languageId;  
+      console.log(`当前文件的语言类型是: ${languageId}`);  
+      if (languageId == "javascript") {
+        prefixDiy = "console.log";
+      }
+      if (languageId == "html") {
+        prefixDiy = "console.log";
+      }
+      if (languageId == "vue") {
+        prefixDiy = "console.log";
+      }
+      if (languageId == "typescript") {
+        prefixDiy = "console.log";
+      }
+      if (languageId == "php") {
+        prefixDiy = "var_dump";
+        // joinSymbol = '.';
+      }
+      if (languageId == "tpl") {
+        prefixDiy = "echo";
+      }
+      if (languageId == "python") {
+        prefixDiy = "print";
+      }
+      if (languageId == "ahk") {
+        prefixDiy = "TrayTip, , 脚本已启动, 3, 17 ;";
+      }
+      if (languageId == "ahk2") {
+        prefixDiy = "TrayTip, , 脚本已启动, 3, 17 ;";
+      }
+      if (prefixDiy == '') {
+        prefixDiy = "console.log";
+      }
+    } else {  
+      prefixDiy = "console.log";
+      console.log('当前没有打开的文本编辑器');  
+    }  
+    return prefixDiy;
+}  
 const logMessageTypeVerificationPriority = _.sortBy(
   [
     { logMessageType: LogMessageType.ArrayAssignment, priority: 2 },
@@ -95,7 +138,8 @@ export class JSDebugMessage extends DebugMessage {
     debuggingMsgContent: string,
     spacesBeforeMsg: string,
   ): string {
-    const wrappingMsg = `console.${extensionProperties.logType}(${
+    const getCurrentLanguageReturn = getCurrentLanguage();
+    const wrappingMsg = `${getCurrentLanguageReturn}(${
       extensionProperties.quote
     }${extensionProperties.logMessagePrefix} ${'-'.repeat(
       debuggingMsgContent.length - 16,
@@ -133,10 +177,11 @@ export class JSDebugMessage extends DebugMessage {
     const semicolon: string = extensionProperties.addSemicolonInTheEnd
       ? ';'
       : '';
+    const getCurrentLanguageReturn = getCurrentLanguage();
     return `${
       extensionProperties.logFunction !== 'log'
         ? extensionProperties.logFunction
-        : `console.${extensionProperties.logType}`
+        : `${getCurrentLanguageReturn}`
     }(${extensionProperties.quote}${extensionProperties.logMessagePrefix}${
       extensionProperties.logMessagePrefix.length !== 0 &&
       extensionProperties.logMessagePrefix !==
