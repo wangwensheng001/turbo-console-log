@@ -1,6 +1,8 @@
 # Official Website
 
-fork from https://www.turboconsolelog.io
+https://www.turboconsolelog.io
+
+# my update
 add php python support
 only on the log mode and break the other mode work
 so , carefully use it
